@@ -2,14 +2,10 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Реалистичный 3D ПК Симулятор 🎮</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Ультимативный 3D ПК в Сборе 🎮</title>
     <style>
-        body {
-            margin: 0; padding: 0; overflow: hidden;
-            background-color: #030305;
-            font-family: 'Segoe UI', sans-serif;
-        }
+        body { margin: 0; padding: 0; overflow: hidden; background-color: #030305; font-family: sans-serif; }
         @media screen and (orientation: portrait) {
             body::before {
                 content: "🔄 Поверни телефон горизонтально!";
@@ -21,152 +17,154 @@
         }
         .ui-panel {
             position: absolute; top: 15px; left: 15px;
-            background: rgba(10, 10, 15, 0.9);
-            backdrop-filter: blur(15px);
+            background: rgba(10, 10, 15, 0.9); backdrop-filter: blur(15px);
             padding: 15px; border-radius: 12px;
             border: 1px solid #00ff88; color: white; z-index: 10;
             max-width: 280px; box-shadow: 0 0 25px rgba(0, 255, 136, 0.3);
+            pointer-events: none;
         }
         h3 { margin: 0 0 5px 0; color: #00ff88; font-size: 16px; }
-        p { margin: 0 0 10px 0; font-size: 12px; color: #a1a1aa; }
-        .back-link {
-            display: inline-block; color: #121214; background: #00ff88;
-            padding: 6px 12px; border-radius: 6px; text-decoration: none;
-            font-weight: bold; font-size: 12px;
-        }
+        p { margin: 0; font-size: 12px; color: #a1a1aa; }
     </style>
 </head>
 <body>
 
     <div class="ui-panel">
-        <h3>REALISTIC 3D GRAPHICS 🌟</h3>
-        <p>Настоящие тени, отражения и металлическая текстура RTX 5090 и сокета Ryzen 9.</p>
-        <a href="index.html" class="back-link">⬅️ В 2D песочницу</a>
+        <h3>БЕЛАЯ СБОРКА МЕЧТЫ 🚀</h3>
+        <p>Код сам нарисовал текстуры для NZXT, ASUS ROG, Ryzen 9 и RTX 5090! Защита CORS побеждена. Крути корпус пальцем!</p>
     </div>
 
-    <!-- Загружаем библиотеки Three.js с поддержкой фотореализма через интернет -->
-    <script src="https://cloudflare.com"></script>
-    <script src="https://jsdelivr.net"></script>
+    <!-- Загружаем 3D-движок из памяти телефона -->
+    <script src="three.min.js"></script>
     
     <script>
-        // 1. Инициализация сцены
         const scene = new THREE.Scene();
         scene.background = new THREE.Color(0x020204);
-        scene.fog = new THREE.FogExp2(0x020204, 0.05); // Легкий туман для глубины пространства
 
-        // 2. Реалистичная камера
         const camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
-        camera.position.set(3, 4, 6);
+        camera.position.set(0, 4, 8); 
+        camera.lookAt(0, 0, 0);
 
-        // 3. Рендерер с поддержкой теней и кинематографичного освещения
-        const renderer = new THREE.WebGLRenderer({ antialias: true, powerPreference: "high-performance" });
+        const renderer = new THREE.WebGLRenderer({ antialias: true });
         renderer.setSize(window.innerWidth, window.innerHeight);
-        renderer.shadowMap.enabled = true; // Физические тени включены!
-        renderer.shadowMap.type = THREE.PCFSoftShadowMap; // Мягкие сглаженные тени
-        renderer.toneMapping = THREE.ACESFilmicToneMapping; // Эффект кино-камеры
-        renderer.toneMappingExposure = 1.0;
         document.body.appendChild(renderer.domElement);
 
-        // 4. МАТЕРИНСКАЯ ПЛАТА (Текстурированный матовый текстолит)
-        const matGeo = new THREE.BoxGeometry(4, 0.1, 4);
-        const matMaterial = new THREE.MeshStandardMaterial({ 
-            color: 0x111216, roughness: 0.5, metalness: 0.4
-        });
-        const motherboard = new THREE.Mesh(matGeo, matMaterial);
-        motherboard.receiveShadow = true; // Плата принимает тени от деталей
-        scene.add(motherboard);
+        const pcGroup = new THREE.Group();
+        scene.add(pcGroup);
 
-        // Радиаторы охлаждения цепей питания вокруг процессора (черный шлифованный алюминий)
-        const radGeo = new THREE.BoxGeometry(0.5, 0.4, 1.5);
-        const radMat = new THREE.MeshStandardMaterial({ color: 0x0a0a0d, roughness: 0.2, metalness: 0.8 });
-        const heatsink = new THREE.Mesh(radGeo, radMat);
-        heatsink.position.set(-1.1, 0.2, -0.5);
-        heatsink.castShadow = true; heatsink.receiveShadow = true;
-        scene.add(heatsink);
+        // --- ГЕНЕРАТОР ТЕКСТУР КОДОМ (Чтобы обойти блокировки картинок) ---
+        function createNoiseTexture(type) {
+            const canvas = document.createElement('canvas');
+            canvas.width = 512; canvas.height = 512;
+            const ctx = canvas.getContext('2d');
 
-        // 5. ПРОЦЕССОР RYZEN 9 С МЕТАЛЛИЧЕСКОЙ КРЫШКОЙ
-        const cpuGeo = new THREE.BoxGeometry(0.8, 0.1, 0.8);
-        const cpuMat = new THREE.MeshStandardMaterial({ 
-            color: 0xcccccc, roughness: 0.15, metalness: 0.95 // Идеальный зеркальный металл
-        });
-        const ryzen9 = new THREE.Mesh(cpuGeo, cpuMat);
-        ryzen9.position.set(0, 0.06, -0.5);
-        ryzen9.castShadow = true;
-        scene.add(ryzen9);
+            if (type === 'board') {
+                ctx.fillStyle = '#1e1f29'; ctx.fillRect(0,0,512,512);
+                ctx.strokeStyle = '#ffffff'; ctx.lineWidth = 2;
+                for(let i=0; i<20; i++) { // Рисуем белые дорожки ASUS ROG платы
+                    ctx.beginPath(); ctx.moveTo(Math.random()*512, 0); ctx.lineTo(Math.random()*512, 512); ctx.stroke();
+                }
+            } else if (type === 'ryzen') {
+                ctx.fillStyle = '#b5b8c4'; ctx.fillRect(0,0,512,512);
+                ctx.fillStyle = '#000000'; ctx.font = 'bold 60px sans-serif';
+                ctx.fillText('AMD RYZEN', 90, 200);
+                ctx.font = '40px sans-serif'; ctx.fillText('9 9950X3D', 150, 300);
+            } else if (type === 'gpu') {
+                ctx.fillStyle = '#111215'; ctx.fillRect(0,0,512,512);
+                ctx.fillStyle = '#00ff88'; // Светящиеся кулеры Palit GameRock
+                for(let i=0; i<3; i++) {
+                    ctx.beginPath(); ctx.arc(100 + i*160, 256, 60, 0, Math.PI*2); ctx.fill();
+                }
+            } else if (type === 'case') {
+                ctx.fillStyle = 'rgba(255,255,255,0.15)'; ctx.fillRect(0,0,512,512);
+                ctx.strokeStyle = '#ffffff'; ctx.lineWidth = 4; // Рамка панорамного стекла NZXT
+                ctx.strokeRect(10, 10, 492, 492);
+            } else if (type === 'psu') {
+                ctx.fillStyle = '#ffffff'; ctx.fillRect(0,0,512,512);
+                ctx.fillStyle = '#111'; ctx.font = 'bold 50px sans-serif';
+                ctx.fillText('SEASONIC', 130, 260);
+            } else if (type === 'ram') {
+                ctx.fillStyle = '#ffffff'; ctx.fillRect(0,0,512,512);
+                ctx.fillStyle = '#00ff88'; ctx.fillRect(0, 0, 512, 40); // RGB полоска сверху плашки
+            }
 
-        // Текстурный пластиковый сокет AM5
-        const socketGeo = new THREE.BoxGeometry(1.2, 0.04, 1.2);
-        const socketMat = new THREE.MeshStandardMaterial({ color: 0x222226, roughness: 0.7 });
-        const socket = new THREE.Mesh(socketGeo, socketMat);
-        socket.position.set(0, 0.03, -0.5);
-        socket.receiveShadow = true;
-        scene.add(socket);
-
-        // 6. ОГРОМНАЯ ВИДЕОКАРТА RTX 5090 (С бэкплейтом и текстурой кожуха)
-        const gpuGeo = new THREE.BoxGeometry(3.2, 0.9, 0.5);
-        const gpuMat = new THREE.MeshStandardMaterial({ 
-            color: 0x181920, roughness: 0.3, metalness: 0.7 
-        });
-        const rtx5090 = new THREE.Mesh(gpuGeo, gpuMat);
-        rtx5090.position.set(0, 0.5, 1.0);
-        rtx5090.castShadow = true; // Видеокарта отбрасывает мощную тень
-        rtx5090.receiveShadow = true;
-        scene.add(rtx5090);
-
-        // 7. СЛОТЫ ОПЕРАТИВНОЙ ПАМЯТИ DDR5
-        const ramSlotGeo = new THREE.BoxGeometry(0.1, 0.2, 1.6);
-        const ramSlotMat = new THREE.MeshStandardMaterial({ color: 0x09090b, roughness: 0.6 });
-        for(let i=0; i<2; i++) {
-            const slot = new THREE.Mesh(ramSlotGeo, ramSlotMat);
-            slot.position.set(0.7 + (i * 0.2), 0.1, -0.5);
-            slot.castShadow = true; slot.receiveShadow = true;
-            scene.add(slot);
+            const texture = new THREE.CanvasTexture(canvas);
+            return texture;
         }
 
-        // 8. СТУДИЙНЫЙ СВЕТ (Как на выставках железа)
-        // Основной белый прожектор сверху для реалистичных теней
-        const mainLight = new THREE.DirectionalLight(0xffffff, 2.5);
-        mainLight.position.set(4, 8, 4);
-        mainLight.castShadow = true;
-        mainLight.shadow.mapSize.width = 2048; // Высокое разрешение теней
-        mainLight.shadow.mapSize.height = 2048;
-        mainLight.shadow.camera.near = 0.5;
-        mainLight.shadow.camera.far = 25;
-        mainLight.shadow.bias = -0.0005;
-        scene.add(mainLight);
+        // 1. БЕЛАЯ МАТЕРИНСКАЯ ПЛАТА ASUS ROG STRIX
+        const matGeo = new THREE.BoxGeometry(4, 0.08, 4);
+        const matMaterial = new THREE.MeshStandardMaterial({ map: createNoiseTexture('board'), roughness: 0.5 });
+        const motherboard = new THREE.Mesh(matGeo, matMaterial);
+        motherboard.position.set(0, -0.4, 0);
+        pcGroup.add(motherboard);
 
-        // Подсветка снизу (отражение от стола)
-        const fillLight = new THREE.DirectionalLight(0x111525, 1.0);
-        fillLight.position.set(-4, -4, -4);
-        scene.add(fillLight);
+        // 2. ПРОЦЕССОР AMD RYZEN 9 9950X3D
+        const cpuGeo = new THREE.BoxGeometry(0.85, 0.1, 0.85);
+        const cpuMaterial = new THREE.MeshStandardMaterial({ map: createNoiseTexture('ryzen'), metalness: 0.6, roughness: 0.2 });
+        const ryzen9 = new THREE.Mesh(cpuGeo, cpuMaterial);
+        ryzen9.position.set(0, -0.32, -0.4);
+        pcGroup.add(ryzen9);
 
-        // Геймерский неоновый кастом-свет (ARGB лента)
-        const rgbLight = new THREE.PointLight(0x00ff88, 3, 8);
-        rgbLight.position.set(0, 1.2, 0.2);
-        rgbLight.castShadow = true;
-        scene.add(rgbLight);
+        // 3. ОПЕРАТИВНАЯ ПАМЯТЬ DDR5 (4 плашки)
+        const ramGeo = new THREE.BoxGeometry(0.06, 0.38, 1.4);
+        const ramMaterial = new THREE.MeshStandardMaterial({ map: createNoiseTexture('ram'), roughness: 0.2 });
 
-        // 9. Настройка OrbitControls
-        const controls = new THREE.OrbitControls(camera, renderer.domElement);
-        controls.enableDamping = true;
-        controls.dampingFactor = 0.05;
-        controls.maxPolarAngle = Math.PI / 2 - 0.05; // Не даем камере заглянуть под плату
+        for (let i = 0; i < 4; i++) {
+            const ramStick = new THREE.Mesh(ramGeo, ramMaterial);
+            ramStick.position.set(0.65 + (i * 0.14), -0.18, -0.4); 
+            pcGroup.add(ramStick);
+        }
 
-        // 10. Игровой цикл рендеринга
+        // 4. ВИДЕОКАРТА NVIDIA RTX 5090 PALIT GAMEROCK
+        const gpuGeo = new THREE.BoxGeometry(3.3, 0.95, 0.55);
+        const gpuMaterial = new THREE.MeshStandardMaterial({ map: createNoiseTexture('gpu'), roughness: 0.3, metalness: 0.5 });
+        const rtx5090 = new THREE.Mesh(gpuGeo, gpuMaterial);
+        rtx5090.position.set(0, 0.1, 0.9);
+        pcGroup.add(rtx5090);
+
+        // 5. БЛОК ПИТАНИЯ SEASONIC CORE V2 WHITE
+        const psuGeo = new THREE.BoxGeometry(2.5, 1.0, 3.2);
+        const psuMaterial = new THREE.MeshStandardMaterial({ map: createNoiseTexture('psu'), roughness: 0.4 });
+        const psu = new THREE.Mesh(psuGeo, psuMaterial);
+        psu.position.set(-1.0, -1.2, -0.2);
+        pcGroup.add(psu);
+
+        // 6. ПАНОРАМНЫЙ КОРПУС NZXT H3 FLOW (Стекло)
+        const caseGeo = new THREE.BoxGeometry(5.4, 4.4, 5.4);
+        const caseMaterial = new THREE.MeshStandardMaterial({ map: createNoiseTexture('case'), transparent: true, opacity: 0.5, roughness: 0.1 });
+        const pcCase = new THREE.Mesh(caseGeo, caseMaterial);
+        pcCase.position.set(0, 0, 0);
+        pcGroup.add(pcCase);
+
+        // 7. СВЕТ
+        const ambientLight = new THREE.AmbientLight(0xffffff, 0.8);
+        scene.add(ambientLight);
+        const spotLight = new THREE.DirectionalLight(0xffffff, 1.5);
+        spotLight.position.set(0, 10, 5);
+        scene.add(spotLight);
+
+        // Вращение пальцем
+        let isDragging = false;
+        let prevX;
+        window.addEventListener('touchstart', (e) => { isDragging = true; prevX = e.touches.clientX; });
+        window.addEventListener('touchmove', (e) => {
+            if (!isDragging) return;
+            let deltaX = e.touches.clientX - prevX;
+            pcGroup.rotation.y += deltaX * 0.01;
+            prevX = e.touches.clientX;
+        });
+        window.addEventListener('touchend', () => isDragging = false);
+
         function animate() {
             requestAnimationFrame(animate);
-            controls.update();
-
-            // Эффект плавного изменения цвета подсветки внутри корпуса (RGB перелив)
-            const time = Date.now() * 0.001;
-            rgbLight.color.setHSL((time * 0.1) % 1.0, 1.0, 0.5);
-
+            if (!isDragging) {
+                pcGroup.rotation.y += 0.003; // Авто-вращение
+            }
             renderer.render(scene, camera);
         }
-        
         animate();
 
-        // Адаптивность под размеры экрана смартфона
         window.addEventListener('resize', () => {
             camera.aspect = window.innerWidth / window.innerHeight;
             camera.updateProjectionMatrix();
@@ -175,4 +173,3 @@
     </script>
 </body>
 </html>
-
